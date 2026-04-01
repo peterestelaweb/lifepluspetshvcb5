@@ -1,0 +1,13 @@
+# Documentación interna — no va al repo público
+openspec/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo

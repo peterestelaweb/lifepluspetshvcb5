@@ -1,0 +1,50 @@
+name: Sync → Repo Neutro
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout SHVCB5 repo
+        uses: actions/checkout@v4
+
+      - name: Generar versión neutra
+        run: |
+          cp index.html index-neutro.html
+
+          # Reemplazar links de tienda SHVCB5 → URLs oficiales LifePlus
+          sed -i 's|https://ww1\.lifeplus\.com/SHVCB5/M/es/es/web-page/products?search=pets|https://ww1.lifeplus.com/es/es/web-page/products?search=pets|g' index-neutro.html
+          sed -i 's|https://www\.lifeplus\.com/SHVCB5/S/|https://www.lifeplus.com/|g' index-neutro.html
+
+          # Eliminar referencias explícitas al ShopID
+          sed -i 's|ShopID SHVCB5|LifePlus International|g' index-neutro.html
+          sed -i 's|<strong>SHVCB5</strong>|LifePlus International|g' index-neutro.html
+          sed -i 's|INDEPENDENT MEMBER · LIFEPLUS INTERNATIONAL|LIFEPLUS INTERNATIONAL|g' index-neutro.html
+
+          # Renombrar como index.html para el repo destino
+          mv index-neutro.html index.html
+
+      - name: Push al repo neutro
+        env:
+          NEUTRO_DEPLOY_TOKEN: ${{ secrets.NEUTRO_DEPLOY_TOKEN }}
+        run: |
+          git config user.name  "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          # Clonar el repo neutro
+          git clone https://x-access-token:${NEUTRO_DEPLOY_TOKEN}@github.com/peterestelaweb/lifepluspetsneutro.git neutro-repo
+
+          # Copiar el index.html generado
+          cp index.html neutro-repo/index.html
+
+          # Commit y push
+          cd neutro-repo
+          git add index.html
+          git diff --staged --quiet || git commit -m "sync: actualización automática desde lifepluspetshvcb5"
+          git push origin main
