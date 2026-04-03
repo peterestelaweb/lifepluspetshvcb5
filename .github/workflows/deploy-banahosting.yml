@@ -1,6 +1,7 @@
 name: Deploy → Banahosting
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
@@ -15,6 +16,11 @@ jobs:
       - name: Clonar repositorio
         uses: actions/checkout@v4
 
+      - name: Preparar archivos a subir
+        run: |
+          mkdir -p public
+          cp index.html public/index.html
+
       - name: Deploy via FTP a Banahosting
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -22,6 +28,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_PATH }}
-          include: |
-            index.html
+          local-dir: ./public/
           log-level: verbose
