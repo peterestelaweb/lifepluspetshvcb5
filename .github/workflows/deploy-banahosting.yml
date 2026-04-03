@@ -72,7 +72,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /vitallinkplus.com/
+          server-dir: /lifepluspets.vitallinkplus.com/
           local-dir: ./neutro/
           security: loose
           log-level: standard
