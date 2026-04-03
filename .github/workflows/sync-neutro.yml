@@ -19,10 +19,40 @@ jobs:
         run: |
           cp source/index.html index-neutro.html
 
+          # Reemplazar códigos de tienda SHVCB5
           sed -i 's|https://ww1\.lifeplus\.com/SHVCB5/M/es/es/web-page/products?search=pets|https://ww1.lifeplus.com/es/es/web-page/products?search=pets|g' index-neutro.html
           sed -i 's|https://www\.lifeplus\.com/SHVCB5/S/|https://www.lifeplus.com/|g' index-neutro.html
           sed -i 's|ShopID SHVCB5|LifePlus International|g' index-neutro.html
           sed -i 's|<strong>SHVCB5</strong>|LifePlus International|g' index-neutro.html
+
+          # Eliminar bloques marcados con NEUTRO-REMOVE (formulario y JS asociado)
+          python3 - <<'EOF'
+import re
+
+with open('index-neutro.html', 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Eliminar bloques entre marcadores HTML <!-- NEUTRO-REMOVE-START --> ... <!-- NEUTRO-REMOVE-END -->
+content = re.sub(
+    r'<!--\s*NEUTRO-REMOVE-START\s*-->.*?<!--\s*NEUTRO-REMOVE-END\s*-->',
+    '',
+    content,
+    flags=re.DOTALL
+)
+
+# Eliminar bloques entre marcadores JS /* NEUTRO-REMOVE-START */ ... /* NEUTRO-REMOVE-END */
+content = re.sub(
+    r'/\*\s*NEUTRO-REMOVE-START\s*\*/.*?/\*\s*NEUTRO-REMOVE-END\s*\*/',
+    '',
+    content,
+    flags=re.DOTALL
+)
+
+with open('index-neutro.html', 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print("Bloques NEUTRO-REMOVE eliminados correctamente")
+EOF
 
       - name: Push al repo neutro
         env:
@@ -36,5 +66,5 @@ jobs:
           git config user.name  "GitHub Actions"
           git config user.email "actions@github.com"
           git add index.html
-          git diff --staged --quiet && echo "Sin cambios" || git commit -m "sync: actualización automática desde lifepluspetshvcb5"
+          git diff --staged --quiet && echo "Sin cambios" || git commit -m "sync: actualización automática desde lifepluspetspain.com"
           git push origin main

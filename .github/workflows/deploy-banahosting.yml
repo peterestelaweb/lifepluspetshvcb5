@@ -1,0 +1,27 @@
+name: Deploy → Banahosting
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'CNAME'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Deploy via FTP a Banahosting
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_PATH }}
+          include: |
+            index.html
+          log-level: verbose
