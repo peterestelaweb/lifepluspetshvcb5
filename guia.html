@@ -770,6 +770,54 @@
         padding: 22px;
       }
     }
+
+    /* ===========================
+       FOOTER
+    =========================== */
+    .footer {
+      margin-top: 64px;
+      background: var(--text-dark);
+      color: rgba(255,255,255,0.78);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      padding: 28px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      line-height: 1.6;
+      max-width: 64ch;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .footer-copy a {
+      color: rgba(255,255,255,0.82);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .footer-video-wrap {
+      width: min(320px, 100%);
+      flex: 0 1 320px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.28);
+    }
+
+    .footer-video {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 <body>
@@ -1331,5 +1379,25 @@
       </section>
     </main>
   </div>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">
+        <a href="index.html">LifePlus Pets</a> · Guía práctica · ShopID <strong>SHVCB5</strong><br>
+        ⚠️ Este contenido es informativo y no sustituye el consejo veterinario profesional.
+      </p>
+      <div class="footer-video-wrap" aria-label="Video LifePlus Pets">
+        <video
+          class="footer-video"
+          src="assets/video/IzzyLowerThird.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+        ></video>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

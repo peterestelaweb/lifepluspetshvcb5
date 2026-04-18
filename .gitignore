@@ -11,3 +11,10 @@ openspec/
 .idea/
 *.swp
 *.swo
+
+# Tooling / local state
+.claude/
+.codex/
+.playwright-mcp/
+tmp/
+output/

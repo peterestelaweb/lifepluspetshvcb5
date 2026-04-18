@@ -1874,6 +1874,22 @@
       flex-wrap: wrap;
     }
 
+    .footer-video-wrap {
+      width: min(320px, 100%);
+      flex: 0 1 320px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.28);
+    }
+
+    .footer-video {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
     .footer-disclaimer {
       font-size: 11px;
       color: rgba(255,255,255,0.3);
@@ -2790,6 +2806,17 @@
           <p class="footer-disclaimer">
             ⚠️ Estos productos no están destinados a diagnosticar, tratar, curar ni prevenir ninguna enfermedad. Los suplementos son complementos nutricionales y no sustituyen el consejo veterinario profesional. Consulta siempre con tu veterinario antes de iniciar cualquier suplementación.
           </p>
+          <div class="footer-video-wrap" aria-label="Video LifePlus Pets">
+            <video
+              class="footer-video"
+              src="assets/video/IzzyLowerThird.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="metadata"
+            ></video>
+          </div>
           <p class="footer-copyright">
             © 2026 LifePlus Pets España · ShopID SHVCB5<br>
             Independent Member · LifePlus International
