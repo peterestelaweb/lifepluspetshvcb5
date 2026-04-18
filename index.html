@@ -1483,6 +1483,21 @@
       backdrop-filter: blur(8px);
     }
 
+    .vets-video-wrap {
+      margin: 16px 0 22px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.18);
+      box-shadow: 0 18px 42px rgba(0,0,0,0.25);
+    }
+
+    .vets-video {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
     .vets-form h3 {
       font-size: 20px;
       font-weight: 800;
@@ -2543,6 +2558,17 @@
           <h3>Contacto para profesionales</h3>
           <p>Rellena el formulario y un asesor especializado se pondrá en contacto contigo en menos de 24h.</p>
 
+          <div class="vets-video-wrap" aria-label="Video LifePlus Pets">
+            <video
+              id="vetVideo"
+              class="vets-video"
+              src="assets/video/IzzyLowerThird.mp4"
+              controls
+              playsinline
+              preload="metadata"
+            ></video>
+          </div>
+
           <form onsubmit="handleFormSubmit(event)">
             <div class="form-group">
               <label for="vet-name">Nombre completo</label>
@@ -3033,6 +3059,33 @@
         }, 4000);
       });
     }
+
+    // Remember video playback position so it doesn't always start from 0.
+    (function () {
+      const video = document.getElementById('vetVideo');
+      if (!video) return;
+
+      const key = 'lpp_vet_video_t';
+
+      video.addEventListener('loadedmetadata', () => {
+        const raw = localStorage.getItem(key);
+        if (!raw) return;
+        const t = Number(raw);
+        if (!Number.isFinite(t)) return;
+        if (t > 0 && t < Math.max(0, video.duration - 0.75)) {
+          video.currentTime = t;
+        }
+      });
+
+      video.addEventListener('timeupdate', () => {
+        if (!Number.isFinite(video.currentTime)) return;
+        if (video.currentTime > 0.5) localStorage.setItem(key, String(video.currentTime));
+      });
+
+      video.addEventListener('ended', () => {
+        localStorage.removeItem(key);
+      });
+    })();
     /* NEUTRO-REMOVE-END */
 
     /* ==============================
