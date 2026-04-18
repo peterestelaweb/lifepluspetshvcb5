@@ -1436,6 +1436,24 @@
       margin-bottom: 40px;
     }
 
+    .vets-content {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .vets-right-video {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
+    }
+
+    @media (max-width: 900px) {
+      .vets-right-video {
+        grid-column: auto;
+        grid-row: auto;
+      }
+    }
+
     .vets-benefits {
       display: flex;
       flex-direction: column;
@@ -1502,6 +1520,11 @@
       width: 100%;
       height: auto;
     }
+
+    /* NEUTRO-REMOVE-START */
+    /* In la BUENA ya está el formulario en la derecha; ocultamos el vídeo que solo usamos en la NEUTRA. */
+    .vets-right-video { display: none; }
+    /* NEUTRO-REMOVE-END */
 
     .vets-form h3 {
       font-size: 20px;
@@ -2548,16 +2571,16 @@
       <div class="vets-grid">
 
         <div class="vets-content fade-in">
-          <span class="section-label">Programa de Socios</span>
           <h2 class="section-title" style="color: var(--white);">
             Una recomendación que puedes hacer<br>con confianza
           </h2>
           <p class="vets-subtitle">
             Respaldada por ciencia, aceptada por los dueños. Únete a la red de veterinarios y profesionales del sector que ya confían en LifePlus Pets.
           </p>
+        </div>
 
-          <!-- NEUTRO-REMOVE-START -->
-          <div class="vets-video-wrap left" aria-label="Video LifePlus Pets">
+        <div class="vets-right-video fade-in fade-in-delay-2">
+          <div class="vets-video-wrap" aria-label="Video LifePlus Pets">
             <video
               id="vetVideo"
               class="vets-video"
@@ -2567,8 +2590,6 @@
               preload="metadata"
             ></video>
           </div>
-          <!-- NEUTRO-REMOVE-END -->
-
         </div>
 
         <!-- NEUTRO-REMOVE-START -->
@@ -3067,7 +3088,9 @@
       });
     }
 
-    // Remember video playback position so it doesn't always start from 0.
+    /* NEUTRO-REMOVE-END */
+
+    // Keep this outside NEUTRO-REMOVE so it also works in la versión NEUTRA.
     (function () {
       const video = document.getElementById('vetVideo');
       if (!video) return;
@@ -3093,7 +3116,6 @@
         localStorage.removeItem(key);
       });
     })();
-    /* NEUTRO-REMOVE-END */
 
     /* ==============================
        SMOOTH SCROLL for anchor links
