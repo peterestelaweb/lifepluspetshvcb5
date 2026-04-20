@@ -7,6 +7,8 @@ const statusFilter = document.getElementById("statusFilter");
 const clearFormBtn = document.getElementById("clearFormBtn");
 const exportCsvBtn = document.getElementById("exportCsvBtn");
 const exportInteractionsBtn = document.getElementById("exportInteractionsBtn");
+const importMonicaBtn = document.getElementById("importMonicaBtn");
+const importBelenBtn = document.getElementById("importBelenBtn");
 const interactionForm = document.getElementById("interactionForm");
 const clearInteractionFormBtn = document.getElementById(
   "clearInteractionFormBtn",
@@ -283,7 +285,7 @@ function renderTable() {
   if (!rows.length) {
     tableBody.innerHTML = `
       <tr>
-        <td colspan="10">No hay contactos con los filtros actuales.</td>
+        <td colspan="11">No hay contactos con los filtros actuales.</td>
       </tr>
     `;
     return;
@@ -300,6 +302,7 @@ function renderTable() {
         <td>${typeLabel(item.contact_type)}</td>
         <td>${escapeHtml(item.phone || "-")}</td>
         <td>${escapeHtml(item.preferred_contact_method || "-")}</td>
+        <td>${escapeHtml(item.owner || "-")}</td>
         <td>
           <span class="status-pill ${statusClass(item.pipeline_stage)}">
             ${stageLabel(item.pipeline_stage)}
@@ -588,6 +591,146 @@ function exportInteractionsCsv() {
   URL.revokeObjectURL(url);
 }
 
+function parseCsvLine(line) {
+  const out = [];
+  let current = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i += 1) {
+    const char = line[i];
+    if (char === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        current += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+    if (char === "," && !inQuotes) {
+      out.push(current);
+      current = "";
+      continue;
+    }
+    current += char;
+  }
+  out.push(current);
+  return out;
+}
+
+function parseCsvText(text) {
+  const lines = text
+    .replace(/\r/g, "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  if (!lines.length) return [];
+  const headers = parseCsvLine(lines[0]).map((h) => h.trim());
+  const rows = [];
+  for (let i = 1; i < lines.length; i += 1) {
+    const cols = parseCsvLine(lines[i]);
+    const row = {};
+    headers.forEach((h, idx) => {
+      row[h] = (cols[idx] || "").trim();
+    });
+    rows.push(row);
+  }
+  return rows;
+}
+
+function normalizePhone(phone) {
+  const digits = String(phone || "").replace(/[^\d+]/g, "");
+  if (!digits) return "";
+  if (digits.startsWith("+")) return digits;
+  if (digits.startsWith("34") && digits.length >= 9) return `+${digits}`;
+  return digits;
+}
+
+function findExistingContact(normalizedPhone, name) {
+  return contacts.find((item) => {
+    const phoneMatch =
+      normalizedPhone &&
+      normalizePhone(item.phone || "") &&
+      normalizePhone(item.phone || "") === normalizedPhone;
+    const nameMatch =
+      sanitize(item.organization_name).toLowerCase() ===
+      sanitize(name).toLowerCase();
+    return phoneMatch || nameMatch;
+  });
+}
+
+function mapImportedRow(row, upline) {
+  const name = sanitize(row.name);
+  const pin = sanitize(row.pin);
+  const address = sanitize(row.address);
+  const month = sanitize(row.last_month);
+  const source = sanitize(row.source);
+  const phone = normalizePhone(row.tel);
+
+  return {
+    id: String(Date.now() + Math.floor(Math.random() * 100000)),
+    contact_type: "other",
+    organization_name: name || `Shopper ${pin || ""}`.trim(),
+    contact_name: "",
+    address,
+    phone,
+    email: "",
+    preferred_contact_method: "whatsapp",
+    pipeline_stage: "nuevo",
+    last_contact_date: "",
+    response_status: "sin_respuesta",
+    response_notes: "",
+    next_step: "Primer contacto",
+    next_step_due: today(),
+    owner: upline,
+    legal_basis: "interes_legitimo",
+    consent_status: "pendiente",
+    priority: "medium",
+    retention_review_at: "",
+    source: `${source || "import"}${pin ? ` · PIN:${pin}` : ""}${month ? ` · Ult mes:${month}` : ""}`,
+    created_at: today(),
+    updated_at: today(),
+    interactions: [],
+  };
+}
+
+async function importNormalizedFile(url, upline) {
+  try {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`No se pudo cargar ${url}`);
+    const text = await response.text();
+    const rows = parseCsvText(text);
+    if (!rows.length) {
+      alert("El archivo no contiene filas importables.");
+      return;
+    }
+
+    let created = 0;
+    let skipped = 0;
+    for (const row of rows) {
+      const payload = mapImportedRow(row, upline);
+      const existing = findExistingContact(payload.phone, payload.organization_name);
+      if (existing) {
+        // Keep existing record, but ensure owner/upline is set.
+        if (!existing.owner) existing.owner = upline;
+        existing.updated_at = today();
+        skipped += 1;
+        continue;
+      }
+      contacts.push(payload);
+      created += 1;
+    }
+
+    saveContacts();
+    renderTable();
+    renderHistoryPanel();
+    alert(
+      `Importacion completada (${upline}). Nuevos: ${created}. Ya existentes: ${skipped}.`,
+    );
+  } catch (error) {
+    alert(`Error en importacion: ${error.message}`);
+  }
+}
+
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   upsertRecord();
@@ -596,6 +739,12 @@ form.addEventListener("submit", (event) => {
 clearFormBtn.addEventListener("click", clearForm);
 exportCsvBtn.addEventListener("click", exportCsv);
 exportInteractionsBtn.addEventListener("click", exportInteractionsCsv);
+importMonicaBtn.addEventListener("click", () =>
+  importNormalizedFile("./import/monica-normalized.csv", "Monica"),
+);
+importBelenBtn.addEventListener("click", () =>
+  importNormalizedFile("./import/belen-normalized.csv", "Belen"),
+);
 searchInput.addEventListener("input", renderTable);
 statusFilter.addEventListener("change", renderTable);
 interactionForm.addEventListener("submit", (event) => {
