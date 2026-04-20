@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PETS Outreach CRM</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <p class="eyebrow">LifePlus Pets</p>
+      <h1>PETS Outreach CRM</h1>
+      <p class="subtitle">
+        Contactos de centros veterinarios, grupos y comunidades caninas con
+        seguimiento accionable.
+      </p>
+      <div class="hero-actions">
+        <button id="exportCsvBtn" class="btn btn-primary">Exportar CSV</button>
+        <button id="clearFormBtn" class="btn btn-secondary" type="button">
+          Limpiar formulario
+        </button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="card">
+        <h2>Nuevo contacto / Editar contacto</h2>
+        <form id="contactForm" class="form-grid">
+          <input type="hidden" id="recordId" />
+
+          <label>
+            Tipo de contacto
+            <select id="contactType" required>
+              <option value="">Selecciona</option>
+              <option value="veterinary_clinic">Centro veterinario</option>
+              <option value="dog_community">Grupo/comunidad canina</option>
+              <option value="trainer">Adiestrador</option>
+              <option value="breeder">Criador</option>
+              <option value="pet_store">Tienda de mascotas</option>
+              <option value="other">Otro</option>
+            </select>
+          </label>
+
+          <label>
+            Nombre (organizacion)
+            <input id="organizationName" required />
+          </label>
+
+          <label>
+            Persona de contacto
+            <input id="contactName" />
+          </label>
+
+          <label>
+            Direccion
+            <input id="address" required />
+          </label>
+
+          <label>
+            Telefono
+            <input id="phone" required />
+          </label>
+
+          <label>
+            Email
+            <input id="email" type="email" />
+          </label>
+
+          <label>
+            Forma de contacto
+            <select id="preferredContactMethod" required>
+              <option value="">Selecciona</option>
+              <option value="phone">Telefono</option>
+              <option value="email">Email</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="instagram_dm">Instagram DM</option>
+              <option value="in_person">Presencial</option>
+            </select>
+          </label>
+
+          <label>
+            Estado del pipeline
+            <select id="pipelineStage" required>
+              <option value="nuevo">Nuevo</option>
+              <option value="intento_1_enviado">Intento 1 enviado</option>
+              <option value="intento_2_enviado">Intento 2 enviado</option>
+              <option value="conversacion_abierta">Conversacion abierta</option>
+              <option value="interesado">Interesado</option>
+              <option value="propuesta_enviada">Propuesta enviada</option>
+              <option value="en_negociacion">En negociacion</option>
+              <option value="ganado">Ganado</option>
+              <option value="perdido">Perdido</option>
+              <option value="en_nurture">En nurture</option>
+            </select>
+          </label>
+
+          <label>
+            Ultimo contacto
+            <input id="lastContactDate" type="date" />
+          </label>
+
+          <label>
+            Respuesta
+            <select id="responseStatus" required>
+              <option value="sin_respuesta">Sin respuesta</option>
+              <option value="interesado">Interesado</option>
+              <option value="no_interesado">No interesado</option>
+              <option value="recontactar">Recontactar</option>
+              <option value="referido">Referido</option>
+            </select>
+          </label>
+
+          <label class="full-width">
+            Respuesta (notas)
+            <textarea id="responseNotes" rows="3"></textarea>
+          </label>
+
+          <label>
+            Proximo paso
+            <input id="nextStep" required />
+          </label>
+
+          <label>
+            Fecha proximo paso
+            <input id="nextStepDue" type="date" />
+          </label>
+
+          <label>
+            Responsable
+            <input id="owner" />
+          </label>
+
+          <label>
+            Base legal (GDPR)
+            <select id="legalBasis">
+              <option value="interes_legitimo">Interes legitimo</option>
+              <option value="precontractual">Precontractual</option>
+              <option value="consentimiento">Consentimiento</option>
+            </select>
+          </label>
+
+          <label>
+            Consentimiento
+            <select id="consentStatus">
+              <option value="no_aplica">No aplica</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="otorgado">Otorgado</option>
+              <option value="retirado">Retirado</option>
+            </select>
+          </label>
+
+          <label>
+            Prioridad
+            <select id="priority">
+              <option value="high">Alta</option>
+              <option value="medium" selected>Media</option>
+              <option value="low">Baja</option>
+            </select>
+          </label>
+
+          <label>
+            Revision de retencion
+            <input id="retentionReviewAt" type="date" />
+          </label>
+
+          <label>
+            Fuente
+            <input id="source" placeholder="manual / referral / event" />
+          </label>
+
+          <div class="full-width">
+            <button class="btn btn-primary" type="submit">
+              Guardar contacto
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="table-header">
+          <h2>Pipeline de contactos</h2>
+          <div class="filters">
+            <input id="searchInput" placeholder="Buscar por nombre o telefono" />
+            <select id="statusFilter">
+              <option value="">Todos los estados del pipeline</option>
+              <option value="nuevo">Nuevo</option>
+              <option value="intento_1_enviado">Intento 1 enviado</option>
+              <option value="intento_2_enviado">Intento 2 enviado</option>
+              <option value="conversacion_abierta">Conversacion abierta</option>
+              <option value="interesado">Interesado</option>
+              <option value="propuesta_enviada">Propuesta enviada</option>
+              <option value="en_negociacion">En negociacion</option>
+              <option value="ganado">Ganado</option>
+              <option value="perdido">Perdido</option>
+              <option value="en_nurture">En nurture</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Organizacion</th>
+                <th>Tipo</th>
+                <th>Telefono</th>
+                <th>Contacto</th>
+                <th>Pipeline</th>
+                <th>Respuesta</th>
+                <th>Proximo paso</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="contactsTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

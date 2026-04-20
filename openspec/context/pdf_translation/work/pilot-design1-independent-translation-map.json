@@ -1,0 +1,97 @@
+{
+  "input_pdf": "PETS MARKETING MATERIAL/Pets-Ahiflower-Oil-Design-1-Independent-US-Bienvenidos-a-lifeplus.pdf",
+  "output_pdf": "openspec/context/pdf_translation/output/Pets-Ahiflower-Oil-Design-1-Independent-ES-pilot.pdf",
+  "items": [
+    {
+      "page": 0,
+      "left": 86,
+      "top": 250,
+      "width": 500,
+      "height": 295,
+      "font": "Helvetica-Bold",
+      "font_size": 63,
+      "leading": 66,
+      "text_color": [1, 1, 1],
+      "background_color": [0.07, 0.13, 0.12],
+      "text": "PORQUE\nTU PERRO\nMERECE\nUNA PIEL QUE\nSE SIENTE BIEN"
+    },
+    {
+      "page": 0,
+      "left": 110,
+      "top": 620,
+      "width": 600,
+      "height": 120,
+      "font": "Helvetica",
+      "font_size": 24,
+      "leading": 28,
+      "text_color": [1, 1, 1],
+      "background_color": [0.07, 0.13, 0.12],
+      "text": "Desde los paseos diarios hasta rodar por el patio, la piel de tu perro se enfrenta a mucho. Este suave spray de aceite de Ahiflower apoya su barrera natural de hidratacion, ayudandolo a mantenerse comodo, suave y radiante, sin necesitar una rutina larga."
+    },
+    {
+      "page": 0,
+      "left": 104,
+      "top": 814,
+      "width": 598,
+      "height": 112,
+      "font": "Helvetica",
+      "font_size": 34,
+      "leading": 38,
+      "text_color": [1, 1, 1],
+      "background_color": [0.07, 0.13, 0.12],
+      "text": "Los omega 3 y 6 de\nAhiflower apoyan la\nhidratacion de la piel"
+    },
+    {
+      "page": 0,
+      "left": 104,
+      "top": 938,
+      "width": 558,
+      "height": 114,
+      "font": "Helvetica",
+      "font_size": 33,
+      "leading": 37,
+      "text_color": [1, 1, 1],
+      "background_color": [0.07, 0.13, 0.12],
+      "text": "Ideal para cachorros con\nzonas secas o descamacion\nestacional"
+    },
+    {
+      "page": 0,
+      "left": 104,
+      "top": 1068,
+      "width": 564,
+      "height": 120,
+      "font": "Helvetica",
+      "font_size": 31,
+      "leading": 35,
+      "text_color": [1, 1, 1],
+      "background_color": [0.07, 0.13, 0.12],
+      "text": "Rocia directamente o mezcla\ncon la comida: es facil\nen ambos casos"
+    },
+    {
+      "page": 0,
+      "left": 56,
+      "top": 1242,
+      "width": 640,
+      "height": 45,
+      "font": "Helvetica",
+      "font_size": 11,
+      "leading": 13,
+      "text_color": [1, 1, 1],
+      "background_color": [0.07, 0.13, 0.12],
+      "text": "*Estas declaraciones no han sido evaluadas por la FDA. Este producto no esta destinado a diagnosticar, tratar, curar ni prevenir ninguna enfermedad."
+    },
+    {
+      "page": 0,
+      "left": 56,
+      "top": 1280,
+      "width": 414,
+      "height": 17,
+      "font": "Helvetica",
+      "font_size": 11,
+      "leading": 13,
+      "text_color": [1, 1, 1],
+      "background_color": [0.07, 0.13, 0.12],
+      "text": "Este producto esta destinado unicamente al mercado de EE. UU."
+    }
+  ]
+}

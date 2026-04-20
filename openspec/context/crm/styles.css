@@ -1,0 +1,244 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600&display=swap");
+
+:root {
+  --bg: #f6f5ef;
+  --ink: #102a27;
+  --ink-soft: #2d4a46;
+  --brand: #114b46;
+  --brand-2: #2f7a72;
+  --accent: #d95f87;
+  --lime: #9bcf3c;
+  --line: #d7d8ce;
+  --card: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  background: radial-gradient(circle at 10% 10%, #ffffff 0%, var(--bg) 45%),
+    linear-gradient(120deg, #eef3e5 0%, #f7f0ea 100%);
+  color: var(--ink);
+}
+
+.hero {
+  padding: 2.4rem 1.2rem 1.2rem;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--brand-2);
+}
+
+h1 {
+  font-family: "Fraunces", serif;
+  margin: 0.4rem 0;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+}
+
+.subtitle {
+  margin: 0 auto;
+  max-width: 860px;
+  color: var(--ink-soft);
+}
+
+.hero-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1100px) {
+  .layout {
+    grid-template-columns: 440px 1fr;
+  }
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 6px 30px rgba(25, 52, 48, 0.08);
+  padding: 1rem;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 0.7rem;
+  font-size: 1.1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.34rem;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.56rem 0.62rem;
+  background: #fff;
+  color: var(--ink);
+}
+
+textarea {
+  resize: vertical;
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 0.56rem 0.95rem;
+  border: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-2) 100%);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #e9eee8;
+  color: var(--ink);
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 920px;
+}
+
+th,
+td {
+  padding: 0.62rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.84rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+.status-pill {
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  display: inline-block;
+}
+
+.status-nuevo {
+  background: #f3f3f0;
+}
+
+.status-intento_1_enviado {
+  background: #edf4fb;
+}
+
+.status-intento_2_enviado {
+  background: #e3ecfb;
+}
+
+.status-conversacion_abierta {
+  background: #ddf4e8;
+}
+
+.status-interesado {
+  background: #d8edf9;
+}
+
+.status-propuesta_enviada {
+  background: #e9e6fb;
+}
+
+.status-en_negociacion {
+  background: #f9efdc;
+}
+
+.status-ganado {
+  background: #dff2d3;
+}
+
+.status-perdido {
+  background: #f8dfdf;
+}
+
+.status-en_nurture {
+  background: #f5f1dc;
+}
+
+.action-group {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.mini {
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
