@@ -384,16 +384,39 @@ function renderTable() {
 }
 
 function getSmsTemplate() {
-  return sanitize(smsTemplateInput?.value) || "Hola {nombre}, soy Maika de LifePlus Pets.";
+  return (
+    sanitize(smsTemplateInput?.value) ||
+    "Hola {nombre_corto}, Peter y Maika de LifePlus por aqui. Hemos visto tu ficha y creemos que puede interesarte una nueva opcion para perros como complemento a LifePlus. Te paso info breve?"
+  );
+}
+
+function formatShortName(raw) {
+  const value = sanitize(raw);
+  if (!value) return "";
+
+  // Handle "Apellido Apellido, Nombre" -> "Nombre Apellido"
+  if (value.includes(",")) {
+    const [lastNamesRaw, firstNamesRaw] = value.split(",", 2);
+    const firstName = sanitize(firstNamesRaw).split(/\s+/).filter(Boolean)[0] || "";
+    const firstLastName = sanitize(lastNamesRaw).split(/\s+/).filter(Boolean)[0] || "";
+    return sanitize(`${firstName} ${firstLastName}`);
+  }
+
+  // Handle "Nombre Apellido Apellido" -> "Nombre Apellido"
+  const parts = value.split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) return `${parts[0]} ${parts[1]}`;
+  return parts[0] || "";
 }
 
 function buildSmsMessage(contact) {
   const template = getSmsTemplate();
-  const name = sanitize(contact.contact_name) || sanitize(contact.organization_name) || "hola";
+  const rawName = sanitize(contact.contact_name) || sanitize(contact.organization_name);
+  const shortName = formatShortName(rawName) || "hola";
   const org = sanitize(contact.organization_name) || "";
   const owner = sanitize(contact.owner) || "";
   return template
-    .replaceAll("{nombre}", name)
+    .replaceAll("{nombre}", shortName)
+    .replaceAll("{nombre_corto}", shortName)
     .replaceAll("{organizacion}", org)
     .replaceAll("{upline}", owner);
 }
