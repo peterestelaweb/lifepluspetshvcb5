@@ -283,6 +283,24 @@ th {
   overflow-x: auto;
 }
 
+.pipeline-stats {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.stat-pill {
+  background: #f3f3f0;
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.stat-pill.stat-ok { background: #d1fae5; color: #065f46; }
+.stat-pill.stat-warn { background: #fee2e2; color: #991b1b; }
+
 tr.overdue td {
   background: #fff5f5;
 }

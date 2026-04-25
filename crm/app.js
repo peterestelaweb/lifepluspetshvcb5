@@ -422,19 +422,28 @@ function countSmsSentToday() {
   }, 0);
 }
 
-function renderStats() {
-  const statsEl = document.getElementById("smsStatsBar");
-  if (!statsEl) return;
-  const total = countSmsSentToday();
-  statsEl.textContent = total > 0 ? `SMS enviados hoy: ${total}` : "";
-  statsEl.style.display = total > 0 ? "block" : "none";
+function renderStats(rows) {
+  const el = document.getElementById("pipelineStats");
+  if (!el) return;
+  const total = rows.length;
+  if (!total) { el.innerHTML = ""; return; }
+  const withResponse = rows.filter((c) =>
+    (c.interactions || []).some((i) => i.type === "inbound")
+  ).length;
+  const overdue = rows.filter((c) => c.next_step_due && c.next_step_due < today()).length;
+  const pct = Math.round((withResponse / total) * 100);
+  el.innerHTML = `
+    <span class="stat-pill">Total: <strong>${total}</strong></span>
+    <span class="stat-pill stat-ok">Con respuesta: <strong>${withResponse} (${pct}%)</strong></span>
+    ${overdue ? `<span class="stat-pill stat-warn">Vencidos: <strong>${overdue}</strong></span>` : ""}
+  `;
 }
 
 function renderTable() {
   const scrollY = window.scrollY;
   const rows = getFilteredContacts();
 
-  renderStats();
+  renderStats(rows);
 
   if (!rows.length) {
     tableBody.innerHTML = `
