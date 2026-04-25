@@ -994,7 +994,8 @@ async function importNormalizedFile(url, upline) {
   try {
     const response = await fetch(url, { cache: "no-store" });
     if (!response.ok) throw new Error(`No se pudo cargar ${url}`);
-    const text = await response.text();
+    const buffer = await response.arrayBuffer();
+    const text = new TextDecoder("windows-1252").decode(buffer);
     const rows = parseCsvText(text);
     if (!rows.length) {
       alert("El archivo no contiene filas importables.");
@@ -1007,8 +1008,8 @@ async function importNormalizedFile(url, upline) {
       const payload = mapImportedRow(row, upline);
       const existing = findExistingContact(payload.phone, payload.organization_name);
       if (existing) {
-        // Keep existing record, but ensure owner/upline is set.
         if (!existing.owner) existing.owner = upline;
+        if (payload.organization_name) existing.organization_name = payload.organization_name;
         existing.updated_at = today();
         skipped += 1;
         continue;
