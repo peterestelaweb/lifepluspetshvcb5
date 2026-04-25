@@ -249,6 +249,11 @@ th {
   border-color: #059669;
 }
 
+.mini.sms-btn { font-weight: 600; }
+.mini.sms-1 { border-color: #059669; color: #059669; }
+.mini.sms-2 { border-color: #d97706; color: #d97706; }
+.mini.sms-3 { border-color: #dc2626; color: #dc2626; }
+
 .history-panel {
   margin-top: 1rem;
   border-top: 1px solid var(--line);

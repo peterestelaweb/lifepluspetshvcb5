@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manual CRM — PETS Outreach</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .manual-wrap { max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+      .manual-wrap h1 { font-family: "Fraunces", serif; }
+      .manual-wrap h2 { color: var(--brand); border-bottom: 2px solid var(--line); padding-bottom: 0.3rem; margin-top: 2rem; }
+      .manual-wrap h3 { color: var(--brand-2); margin-top: 1.2rem; }
+      .manual-wrap p, .manual-wrap li { line-height: 1.7; color: var(--ink-soft); }
+      .manual-wrap ul { padding-left: 1.2rem; }
+      .tip { background: #d1fae5; border-left: 4px solid #059669; padding: 0.7rem 1rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+      .warning { background: #fef3c7; border-left: 4px solid #d97706; padding: 0.7rem 1rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+      .step { display: flex; gap: 1rem; align-items: flex-start; margin: 0.7rem 0; }
+      .step-num { background: var(--brand); color: #fff; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 0.85rem; }
+      .pipeline-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+      .pipeline-table th, .pipeline-table td { padding: 0.6rem 0.8rem; border: 1px solid var(--line); font-size: 0.9rem; text-align: left; }
+      .pipeline-table th { background: var(--brand); color: #fff; }
+      .pipeline-table tr:nth-child(even) { background: #f6f5ef; }
+      .back-btn { display: inline-block; margin-bottom: 1.5rem; color: var(--brand); text-decoration: none; font-weight: 600; }
+      .back-btn:hover { text-decoration: underline; }
+      .badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+      .badge-green { background: #d1fae5; color: #065f46; }
+      .badge-orange { background: #fef3c7; color: #92400e; }
+      .badge-red { background: #fee2e2; color: #991b1b; }
+    </style>
+  </head>
+  <body>
+    <div class="manual-wrap">
+      <a class="back-btn" href="./index.html">← Volver al CRM</a>
+
+      <p class="eyebrow">LifePlus Pets</p>
+      <h1>Manual de uso — PETS Outreach CRM</h1>
+      <p>Guía práctica para gestionar contactos, enviar SMS y hacer seguimiento de respuestas.</p>
+
+      <!-- ═══════════════════════════════════════ -->
+      <h2>1. ¿Qué es este CRM?</h2>
+      <p>Es una herramienta para llevar el control de los contactos del sector veterinario y canino a los que presentamos la línea PETS de LifePlus. Permite enviar SMS personalizados, registrar respuestas y saber en qué fase está cada contacto.</p>
+
+      <!-- ═══════════════════════════════════════ -->
+      <h2>2. Las etapas del pipeline</h2>
+      <p>Cada contacto pasa por estas etapas según cómo avanza la conversación:</p>
+      <table class="pipeline-table">
+        <thead><tr><th>Etapa</th><th>Significado</th><th>Qué hacer</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nuevo</strong></td><td>Contacto importado, sin gestión aún</td><td>Enviar primer SMS</td></tr>
+          <tr><td><strong>Intento 1 enviado</strong></td><td>Se envió el primer SMS, sin respuesta</td><td>Esperar 2 días, luego 2º intento</td></tr>
+          <tr><td><strong>Intento 2 enviado</strong></td><td>Segundo SMS enviado, sin respuesta</td><td>Esperar 2 días, decidir si nurture</td></tr>
+          <tr><td><strong>Conversación abierta</strong></td><td>Hay diálogo activo</td><td>Responder y avanzar</td></tr>
+          <tr><td><strong>Interesado</strong></td><td>Ha mostrado interés claro</td><td>Enviar propuesta</td></tr>
+          <tr><td><strong>Propuesta enviada</strong></td><td>Se mandó información detallada</td><td>Hacer seguimiento</td></tr>
+          <tr><td><strong>En negociación</strong></td><td>Está valorando activamente</td><td>Acompañar el proceso</td></tr>
+          <tr><td><strong>Ganado</strong></td><td>Cliente activo</td><td>Onboarding y fidelización</td></tr>
+          <tr><td><strong>Perdido</strong></td><td>No interesado</td><td>Archivar</td></tr>
+          <tr><td><strong>En nurture</strong></td><td>Sin respuesta tras 3 intentos</td><td>Contacto futuro esporádico</td></tr>
+        </tbody>
+      </table>
+      <div class="tip">El pipeline avanza <strong>automáticamente</strong> si pasan 2 días sin respuesta registrada. Al abrir el CRM, revisa si hay contactos que cambiaron de etapa.</div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <h2>3. Enviar un SMS</h2>
+      <div class="step"><div class="step-num">1</div><div>Localiza el contacto en la tabla. Usa el buscador (nombre o teléfono) o filtra por etapa del pipeline.</div></div>
+      <div class="step"><div class="step-num">2</div><div>Pulsa el botón <strong>SMS</strong> en la columna Acciones. Se abrirá Messages en Mac con el número y el mensaje ya escritos.</div></div>
+      <div class="step"><div class="step-num">3</div><div>Revisa el mensaje en Messages y pulsa <strong>Enviar</strong>. El CRM registra automáticamente el intento en el historial.</div></div>
+      <div class="step"><div class="step-num">4</div><div>Vuelve al CRM (Cmd+Tab). La lista mantiene tu posición de scroll.</div></div>
+
+      <h3>Indicadores del botón SMS</h3>
+      <ul>
+        <li><strong>SMS</strong> — Sin contacto previo</li>
+        <li><strong>SMS ● ✓</strong> <span class="badge badge-green">verde</span> — 1 SMS enviado (hoy)</li>
+        <li><strong>SMS ●●</strong> <span class="badge badge-orange">naranja</span> — 2 intentos realizados</li>
+        <li><strong>SMS ●●●</strong> <span class="badge badge-red">rojo</span> — 3 intentos, pasar a nurture</li>
+      </ul>
+
+      <h3>Plantilla SMS</h3>
+      <p>El campo <em>Plantilla SMS</em> (arriba a la derecha de la tabla) guarda el texto que se pre-rellena en Messages. Puedes editarlo y se guarda automáticamente para la próxima sesión.</p>
+      <p>Plantilla oficial aprobada (149 chars, 1 SMS):</p>
+      <blockquote style="background:#f6f5ef;padding:0.7rem 1rem;border-radius:8px;font-style:normal;">
+        Hola {nombre_corto}, somos Peter y Maika de LifePlus. Hemos visto tu ficha, creemos que nuestra nueva linea Pets te puede interesar. Te paso info?
+      </blockquote>
+      <div class="tip"><strong>{nombre_corto}</strong> se sustituye automáticamente. Para "García-Román Ramírez, Juan Carlos" → "Juan García-Román". Para "Lourdes Izquierdo Lujan" → "Lourdes Izquierdo".</div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <h2>4. Registrar la respuesta</h2>
+      <p>Cuando alguien responda (o confirmes que no ha respondido), anótalo en el historial:</p>
+      <div class="step"><div class="step-num">1</div><div>Pulsa <strong>Historial</strong> en la fila del contacto.</div></div>
+      <div class="step"><div class="step-num">2</div><div>Se abre el panel de historial abajo. Rellena el formulario:</div></div>
+      <ul style="margin-left:3rem;">
+        <li><strong>Canal</strong>: SMS, WhatsApp, Llamada…</li>
+        <li><strong>Tipo</strong>: <em>Entrada</em> si ellos escribieron, <em>Nota</em> si es un apunte tuyo</li>
+        <li><strong>Respondió</strong>: Sí / No / Pendiente</li>
+        <li><strong>Que dijo</strong>: Copia el mensaje o resume la llamada</li>
+        <li><strong>Resultado</strong>: Interesado / No interesado / Recontactar…</li>
+        <li><strong>Próximo paso</strong>: Qué harás y cuándo</li>
+      </ul>
+      <div class="step"><div class="step-num">3</div><div>Pulsa <strong>Registrar interacción</strong>. El pipeline y el estado se actualizan automáticamente.</div></div>
+      <div class="warning">Si alguien responde pero <strong>no lo anotas</strong>, el sistema avanzará el pipeline automáticamente a los 2 días como si no hubiera contestado. Anota siempre las respuestas.</div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <h2>5. Importar contactos (Mónica / Belén)</h2>
+      <div class="step"><div class="step-num">1</div><div>Prepara el CSV con columnas: <code>name, pin, address, last_month, source, tel</code></div></div>
+      <div class="step"><div class="step-num">2</div><div>Sube el archivo al servidor como <code>crm/import/monica-normalized.csv</code> o <code>belen-normalized.csv</code></div></div>
+      <div class="step"><div class="step-num">3</div><div>Pulsa <strong>Importar Monica</strong> o <strong>Importar Belen</strong> en la cabecera. Los contactos existentes (mismo teléfono o nombre) no se duplican.</div></div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <h2>6. Exportar datos</h2>
+      <ul>
+        <li><strong>Exportar CSV</strong>: Descarga todos los contactos con sus campos</li>
+        <li><strong>Exportar interacciones</strong>: Descarga el historial completo de todas las interacciones (útil para análisis en Excel)</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════ -->
+      <h2>7. Preguntas frecuentes</h2>
+
+      <h3>¿Por qué el número en Messages es diferente al del CRM?</h3>
+      <p>Comprueba que el teléfono está bien introducido en la ficha del contacto. El CRM añade +34 automáticamente si el número empieza por 34, pero si el número tiene un formato raro puede salir mal.</p>
+
+      <h3>¿Por qué el mensaje aparece vacío en Messages?</h3>
+      <p>Asegúrate de estar usando la versión actualizada del CRM (Cmd+Shift+R para forzar recarga). Las versiones anteriores tenían este bug, ya corregido.</p>
+
+      <h3>¿Los datos se pierden si cierro el navegador?</h3>
+      <p>No. Los datos se guardan tanto en el navegador (localStorage) como en el servidor. Al reabrir el CRM se cargan del servidor y se fusionan con los datos locales — siempre gana el más reciente.</p>
+
+      <h3>¿Cuántos SMS cuenta como un SMS?</h3>
+      <p>La plantilla oficial (149 chars) cabe en <strong>1 SMS GSM-7</strong> para cualquier nombre. Evita añadir tildes (á, é, í, ó, ú) al editar la plantilla — forzarían codificación UCS-2 y pasarías a 3 SMS por envío.</p>
+
+      <h3>¿Qué pasa después de 3 intentos sin respuesta?</h3>
+      <p>El contacto pasa automáticamente a etapa <strong>En nurture</strong>. Ahí ya no recibe auto-avances. Puedes recontactarlos en el futuro de forma puntual.</p>
+
+      <p style="margin-top:3rem;font-size:0.8rem;color:var(--ink-soft);">Manual generado el 25/04/2026 — LifePlus Pets CRM v2</p>
+    </div>
+  </body>
+</html>

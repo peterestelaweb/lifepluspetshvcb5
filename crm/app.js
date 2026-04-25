@@ -402,11 +402,10 @@ function escapeHtml(text) {
     .replaceAll("'", "&#39;");
 }
 
-function hasSentSmsToday(contact) {
-  const t = today();
-  return (contact.interactions || []).some(
-    (i) => i.type === "outbound" && i.channel === "sms" && i.at.slice(0, 10) === t
-  );
+function getSmsAttempts(contact) {
+  return (contact.interactions || []).filter(
+    (i) => i.type === "outbound" && i.channel === "sms"
+  ).length;
 }
 
 function countSmsSentToday() {
@@ -446,10 +445,15 @@ function renderTable() {
   tableBody.innerHTML = rows
     .map(
       (item) => {
-        const smsSentToday = hasSentSmsToday(item);
-        const smsBtn = smsSentToday
-          ? `<button class="mini sms-sent" data-action="sms" data-id="${item.id}">SMS ✓</button>`
-          : `<button class="mini" data-action="sms" data-id="${item.id}">SMS</button>`;
+        const attempts = getSmsAttempts(item);
+        const sentToday = (item.interactions || []).some(
+          (i) => i.type === "outbound" && i.channel === "sms" && i.at.slice(0, 10) === today()
+        );
+        const dots = "●".repeat(Math.min(attempts, 3));
+        const attemptClass = attempts === 0 ? "" : attempts === 1 ? "sms-1" : attempts === 2 ? "sms-2" : "sms-3";
+        const todayMark = sentToday ? " ✓" : "";
+        const smsLabel = attempts > 0 ? `SMS ${dots}${todayMark}` : "SMS";
+        const smsBtn = `<button class="mini sms-btn ${attemptClass}" data-action="sms" data-id="${item.id}">${smsLabel}</button>`;
         return `
         <tr>
           <td>
