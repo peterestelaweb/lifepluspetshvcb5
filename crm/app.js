@@ -111,11 +111,67 @@ async function hydrateFromServer() {
     const remoteContacts = await loadContactsRemote();
     contacts = remoteContacts;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
+    checkAndAutoAdvancePipeline();
     renderTable();
     renderHistoryPanel();
   } catch (error) {
     console.warn("No se pudo cargar del servidor, uso localStorage:", error);
   }
+}
+
+const AUTO_ADVANCE_DAYS = 2;
+const AUTO_ADVANCE_STAGES = {
+  nuevo: "intento_1_enviado",
+  intento_1_enviado: "intento_2_enviado",
+  intento_2_enviado: "en_nurture",
+};
+
+function checkAndAutoAdvancePipeline() {
+  const todayMs = new Date(today()).getTime();
+  let changed = false;
+
+  for (const contact of contacts) {
+    if (!AUTO_ADVANCE_STAGES[contact.pipeline_stage]) continue;
+
+    const interactions = Array.isArray(contact.interactions) ? contact.interactions : [];
+
+    const lastOutbound = interactions
+      .filter((i) => i.type === "outbound")
+      .sort((a, b) => String(b.at).localeCompare(String(a.at)))[0];
+
+    if (!lastOutbound) continue;
+
+    const outboundMs = new Date(lastOutbound.at.slice(0, 10)).getTime();
+    const daysSince = Math.floor((todayMs - outboundMs) / 86400000);
+
+    if (daysSince < AUTO_ADVANCE_DAYS) continue;
+
+    const hasInboundAfter = interactions.some(
+      (i) => i.type === "inbound" && String(i.at) > String(lastOutbound.at)
+    );
+
+    if (hasInboundAfter) continue;
+
+    contact.pipeline_stage = AUTO_ADVANCE_STAGES[contact.pipeline_stage];
+    contact.response_status = "sin_respuesta";
+    contact.updated_at = today();
+    contact.interactions.push({
+      id: `auto_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      at: nowLocalDatetime(),
+      channel: "sms",
+      type: "note",
+      responded: "no",
+      summary: `Sin respuesta tras ${daysSince} dias — avance automatico de pipeline`,
+      said: "",
+      result: "sin_respuesta",
+      next_step: contact.next_step || "",
+      next_due: contact.next_step_due || "",
+      owner: contact.owner || "",
+    });
+    changed = true;
+  }
+
+  if (changed) saveContacts();
 }
 
 function sanitize(value) {
