@@ -106,11 +106,29 @@ async function saveContactsRemote() {
   }
 }
 
+function mergeContacts(serverList, localList) {
+  const merged = new Map();
+  for (const c of serverList) merged.set(c.id, c);
+  for (const c of localList) {
+    const server = merged.get(c.id);
+    if (!server) {
+      merged.set(c.id, c);
+    } else {
+      const serverTime = new Date(server.updated_at || 0).getTime();
+      const localTime = new Date(c.updated_at || 0).getTime();
+      if (localTime > serverTime) merged.set(c.id, c);
+    }
+  }
+  return normalizeContacts([...merged.values()]);
+}
+
 async function hydrateFromServer() {
   try {
     const remoteContacts = await loadContactsRemote();
-    contacts = remoteContacts;
+    const localContacts = loadContactsLocal();
+    contacts = mergeContacts(remoteContacts, localContacts);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
+    void saveContactsRemote();
     checkAndAutoAdvancePipeline();
     renderTable();
     renderHistoryPanel();
@@ -384,61 +402,91 @@ function escapeHtml(text) {
     .replaceAll("'", "&#39;");
 }
 
+function hasSentSmsToday(contact) {
+  const t = today();
+  return (contact.interactions || []).some(
+    (i) => i.type === "outbound" && i.channel === "sms" && i.at.slice(0, 10) === t
+  );
+}
+
+function countSmsSentToday() {
+  const t = today();
+  return contacts.reduce((acc, c) => {
+    const sent = (c.interactions || []).filter(
+      (i) => i.type === "outbound" && i.channel === "sms" && i.at.slice(0, 10) === t
+    ).length;
+    return acc + sent;
+  }, 0);
+}
+
+function renderStats() {
+  const statsEl = document.getElementById("smsStatsBar");
+  if (!statsEl) return;
+  const total = countSmsSentToday();
+  statsEl.textContent = total > 0 ? `SMS enviados hoy: ${total}` : "";
+  statsEl.style.display = total > 0 ? "block" : "none";
+}
+
 function renderTable() {
+  const scrollY = window.scrollY;
   const rows = getFilteredContacts();
+
+  renderStats();
+
   if (!rows.length) {
     tableBody.innerHTML = `
       <tr>
         <td colspan="11">No hay contactos con los filtros actuales.</td>
       </tr>
     `;
+    window.scrollTo(0, scrollY);
     return;
   }
 
   tableBody.innerHTML = rows
     .map(
-      (item) => `
-      <tr>
-        <td>
-          <strong>${escapeHtml(item.organization_name)}</strong><br />
-          <small>${escapeHtml(item.contact_name || "-")}</small>
-        </td>
-        <td>${typeLabel(item.contact_type)}</td>
-        <td>${escapeHtml(item.phone || "-")}</td>
-        <td>${escapeHtml(item.preferred_contact_method || "-")}</td>
-        <td>${escapeHtml(item.owner || "-")}</td>
-        <td>
-          <span class="status-pill ${statusClass(item.pipeline_stage)}">
-            ${stageLabel(item.pipeline_stage)}
-          </span>
-        </td>
-        <td>
-          ${responseLabel(item.response_status)}<br />
-          <small>${escapeHtml(item.response_notes || "")}</small>
-        </td>
-        <td>${escapeHtml(item.next_step || "-")}</td>
-        <td>${escapeHtml(item.next_step_due || "-")}</td>
-        <td>${Array.isArray(item.interactions) ? item.interactions.length : 0}</td>
-        <td>
-          <div class="action-group">
-            <button class="mini" data-action="sms" data-id="${item.id}">
-              SMS
-            </button>
-            <button class="mini" data-action="history" data-id="${item.id}">
-              Historial
-            </button>
-            <button class="mini" data-action="edit" data-id="${item.id}">
-              Editar
-            </button>
-            <button class="mini" data-action="delete" data-id="${item.id}">
-              Borrar
-            </button>
-          </div>
-        </td>
-      </tr>
-    `,
+      (item) => {
+        const smsSentToday = hasSentSmsToday(item);
+        const smsBtn = smsSentToday
+          ? `<button class="mini sms-sent" data-action="sms" data-id="${item.id}">SMS ✓</button>`
+          : `<button class="mini" data-action="sms" data-id="${item.id}">SMS</button>`;
+        return `
+        <tr>
+          <td>
+            <strong>${escapeHtml(item.organization_name)}</strong><br />
+            <small>${escapeHtml(item.contact_name || "-")}</small>
+          </td>
+          <td>${typeLabel(item.contact_type)}</td>
+          <td>${escapeHtml(item.phone || "-")}</td>
+          <td>${escapeHtml(item.preferred_contact_method || "-")}</td>
+          <td>${escapeHtml(item.owner || "-")}</td>
+          <td>
+            <span class="status-pill ${statusClass(item.pipeline_stage)}">
+              ${stageLabel(item.pipeline_stage)}
+            </span>
+          </td>
+          <td>
+            ${responseLabel(item.response_status)}<br />
+            <small>${escapeHtml(item.response_notes || "")}</small>
+          </td>
+          <td>${escapeHtml(item.next_step || "-")}</td>
+          <td>${escapeHtml(item.next_step_due || "-")}</td>
+          <td>${Array.isArray(item.interactions) ? item.interactions.length : 0}</td>
+          <td>
+            <div class="action-group">
+              ${smsBtn}
+              <button class="mini" data-action="history" data-id="${item.id}">Historial</button>
+              <button class="mini" data-action="edit" data-id="${item.id}">Editar</button>
+              <button class="mini" data-action="delete" data-id="${item.id}">Borrar</button>
+            </div>
+          </td>
+        </tr>
+      `;
+      }
     )
     .join("");
+
+  window.scrollTo(0, scrollY);
 }
 
 function getSmsTemplate() {
