@@ -455,8 +455,9 @@ function renderTable() {
         const todayMark = sentToday ? " ✓" : "";
         const smsLabel = attempts > 0 ? `SMS ${dots}${todayMark}` : "SMS";
         const smsBtn = `<button class="mini sms-btn ${attemptClass}" data-action="sms" data-id="${item.id}">${smsLabel}</button>`;
+        const isOverdue = item.next_step_due && item.next_step_due < today();
         return `
-        <tr>
+        <tr class="${isOverdue ? "overdue" : ""}">
           <td>
             <strong>${escapeHtml(item.organization_name)}</strong><br />
             <small>${escapeHtml(item.contact_name || "-")}</small>

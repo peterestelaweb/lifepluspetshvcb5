@@ -282,6 +282,15 @@ th {
   overflow-x: auto;
 }
 
+tr.overdue td {
+  background: #fff5f5;
+}
+
+tr.overdue td:nth-child(9) {
+  color: #dc2626;
+  font-weight: 600;
+}
+
 .sms-banner {
   position: fixed;
   bottom: 1.5rem;
