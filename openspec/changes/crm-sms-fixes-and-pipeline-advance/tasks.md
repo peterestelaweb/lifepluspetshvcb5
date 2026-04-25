@@ -28,3 +28,31 @@
 - [x] 4.5 Llamar a `checkAndAutoAdvancePipeline()` después de `hydrateFromServer`
 - [x] 4.6 Verificar que contactos con respuesta registrada NO avanzan
 - [x] 4.7 Verificar que contactos en ganado/perdido/en_nurture NO avanzan
+
+## 5. Mejoras UX propuestas — implementación parcial
+
+- [x] 5.1 Banner de respuesta rápida al volver de Messages.app (`visibilitychange` → banner con "Sí / No / Más tarde")
+- [ ] 5.2 Filas overdue en rojo — highlight rojo en tabla si `next_step_due` < hoy
+- [ ] 5.3 Botón WhatsApp — abre `wa.me/34XXXXXXXXX?text=...` con la misma plantilla SMS
+- [ ] 5.4 Filtro por responsable — dropdown Mónica / Belén junto a los filtros existentes
+- [ ] 5.5 Estadísticas de respuesta — % respuesta por etapa del pipeline (panel debajo de la tabla)
+
+### Notas para implementación futura
+
+**5.2 — Filas overdue:**
+En `renderTable()`, añadir clase `overdue` al `<tr>` si `item.next_step_due < today()`.
+En CSS: `.overdue td { background: #fef2f2; }` o similar.
+
+**5.3 — Botón WhatsApp:**
+Similar a `sendSmsForContact()` pero con URL `https://wa.me/${phone}?text=${encodeURIComponent(message)}`.
+Añadir botón "WA" junto al botón SMS en la columna Acciones.
+También debería registrar outbound en historial y activar el banner de respuesta.
+
+**5.4 — Filtro por responsable:**
+En `index.html`, añadir `<select id="ownerFilter">` junto a `statusFilter`.
+En `getFilteredContacts()`, añadir `.filter((item) => owner ? item.owner === owner : true)`.
+Los valores son "Monica", "Belen" y "" (todos).
+
+**5.5 — Estadísticas:**
+Calcular por etapa: total contactos + % con al menos 1 inbound.
+Mostrar como tabla o pills debajo del pipeline. Bajo prioridad.
