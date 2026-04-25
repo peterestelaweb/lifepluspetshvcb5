@@ -444,6 +444,7 @@ function sendSmsForContact(id) {
   const smsUrl = `sms:${normalizedPhone}?body=${encodeURIComponent(message)}`;
   const smsLink = document.createElement("a");
   smsLink.href = smsUrl;
+  smsLink.style.cssText = "position:fixed;top:0;left:0;opacity:0;pointer-events:none;";
   document.body.appendChild(smsLink);
   smsLink.click();
   smsLink.remove();
