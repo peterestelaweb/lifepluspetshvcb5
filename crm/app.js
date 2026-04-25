@@ -56,6 +56,7 @@ const sourceInput = document.getElementById("source");
 
 let contacts = loadContactsLocal();
 let selectedHistoryContactId = "";
+let pendingSmsContactId = null;
 
 function normalizeContacts(items) {
   const list = Array.isArray(items) ? items : [];
@@ -575,6 +576,8 @@ function sendSmsForContact(id) {
   saveContacts();
   renderTable();
   if (selectedHistoryContactId === id) renderHistoryPanel();
+
+  pendingSmsContactId = id;
 }
 
 function toCsv(records) {
@@ -973,6 +976,68 @@ async function importNormalizedFile(url, upline) {
     alert(`Error en importacion: ${error.message}`);
   }
 }
+
+function showSmsBanner(contactId) {
+  const contact = findContactById(contactId);
+  if (!contact) return;
+
+  document.getElementById("sms-response-banner")?.remove();
+
+  const name = escapeHtml(contact.organization_name || "este contacto");
+  const banner = document.createElement("div");
+  banner.id = "sms-response-banner";
+  banner.className = "sms-banner";
+  banner.innerHTML = `
+    <span class="sms-banner-text">¿Respondio <strong>${name}</strong>?</span>
+    <div class="sms-banner-actions">
+      <button class="btn btn-primary" data-banner-action="si">Si respondio</button>
+      <button class="btn btn-secondary" data-banner-action="no">No respondio</button>
+      <button class="btn btn-secondary" data-banner-action="later">Mas tarde</button>
+    </div>
+  `;
+
+  banner.addEventListener("click", (e) => {
+    const action = e.target.closest("[data-banner-action]")?.dataset?.bannerAction;
+    if (!action) return;
+
+    if (action === "si") {
+      const interaction = {
+        id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        at: nowLocalDatetime(),
+        channel: "sms",
+        type: "inbound",
+        responded: "si",
+        summary: "Respondio al SMS (registrado desde banner rapido)",
+        said: "",
+        result: "interesado",
+        next_step: "Responder y avanzar conversacion",
+        next_due: today(),
+        owner: contact.owner || "",
+      };
+      appendInteraction(contact, interaction);
+      if (["nuevo", "intento_1_enviado", "intento_2_enviado"].includes(contact.pipeline_stage)) {
+        contact.pipeline_stage = "conversacion_abierta";
+      }
+      contact.updated_at = today();
+      saveContacts();
+      renderTable();
+      openHistory(contactId);
+      renderHistoryPanel();
+    }
+
+    banner.remove();
+  });
+
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 30000);
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && pendingSmsContactId) {
+    showSmsBanner(pendingSmsContactId);
+    pendingSmsContactId = null;
+  }
+});
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
