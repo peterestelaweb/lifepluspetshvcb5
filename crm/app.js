@@ -317,6 +317,9 @@ function editRecord(id) {
 }
 
 function deleteRecord(id) {
+  const contact = findContactById(id);
+  if (!contact) return;
+  if (!confirm(`¿Borrar "${contact.organization_name}"? Esta accion no se puede deshacer.`)) return;
   contacts = contacts.filter((item) => item.id !== id);
   saveContacts();
   renderTable();
@@ -582,7 +585,7 @@ function sendSmsForContact(id) {
     said: message,
     result: "sin_respuesta",
     next_step: "Esperar respuesta por SMS",
-    next_due: today(),
+    next_due: "",
     owner: sanitize(contact.owner),
   };
 
@@ -619,7 +622,7 @@ function sendWhatsAppForContact(id) {
     said: message,
     result: "sin_respuesta",
     next_step: "Esperar respuesta por WhatsApp",
-    next_due: today(),
+    next_due: "",
     owner: sanitize(contact.owner),
   };
 
