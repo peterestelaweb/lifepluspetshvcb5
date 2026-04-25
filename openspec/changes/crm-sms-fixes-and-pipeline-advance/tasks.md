@@ -34,7 +34,7 @@
 - [x] 5.1 Banner de respuesta rápida al volver de Messages.app (`visibilitychange` → banner con "Sí / No / Más tarde")
 - [x] 5.2 Filas overdue en rojo — highlight rojo en tabla si `next_step_due` < hoy
 - [x] 5.3 Botón WhatsApp — abre `wa.me/34XXXXXXXXX?text=...` con la misma plantilla SMS
-- [ ] 5.4 Filtro por responsable — dropdown Mónica / Belén junto a los filtros existentes
+- [x] 5.4 Filtro por responsable — dropdown Mónica / Belén junto a los filtros existentes
 - [ ] 5.5 Estadísticas de respuesta — % respuesta por etapa del pipeline (panel debajo de la tabla)
 
 ### Notas para implementación futura
