@@ -1,7 +1,7 @@
 const STORAGE_KEY = "pets_crm_contacts_v2";
 const SMS_TEMPLATE_KEY = "pets_crm_sms_template_v2";
 const API_URL = "./api.php";
-const DEFAULT_SMS_TEMPLATE = "Hola {nombre_corto}, somos Peter y Maika de LifePlus por aquí. Hemos visto tu ficha y creemos que puede interesarte una nueva opción para perros como complemento a LifePlus. ¿Te paso info breve?";
+const DEFAULT_SMS_TEMPLATE = "Hola {nombre_corto}, somos Peter y Maika de LifePlus. Hemos visto tu ficha, creemos que nuestra nueva linea Pets te puede interesar. Te paso info?";
 
 const form = document.getElementById("contactForm");
 const tableBody = document.getElementById("contactsTableBody");
