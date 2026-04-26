@@ -66,6 +66,11 @@ jobs:
                   'https://ww1.lifeplus.com/SHVCB5/M/es/es/web-page/products?search=pets',
                   'https://ww1.lifeplus.com/es/es/web-page/products?search=pets'
               )
+              content = re.sub(
+                  r'https://ww1\.lifeplus\.com/SHVCB5/M/es/es/product-details/',
+                  'https://ww1.lifeplus.com/es/es/product-details/',
+                  content
+              )
               content = re.sub(r'https://www\.lifeplus\.com/SHVCB5/S/', 'https://www.lifeplus.com/', content)
               content = content.replace('ShopID SHVCB5', 'LifePlus International')
               content = re.sub(r'<strong>SHVCB5</strong>', 'LifePlus International', content)
